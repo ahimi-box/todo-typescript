@@ -1,0 +1,24 @@
+# 一覧
+GET http://localhost:8000/api/folders
+
+
+### フォルダ作成
+POST http://localhost:8000/api/folders
+Content-Type: application/json
+
+{
+  "title": "買い物リスト"
+}
+
+
+### 更新
+PUT http://localhost:8000/api/folders/3
+Content-Type: application/json
+
+{
+  "title": "月末の買い物"
+}
+
+
+### 削除
+DELETE http://localhost:8000/api/folders/1

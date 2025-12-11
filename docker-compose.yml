@@ -1,0 +1,78 @@
+services:
+  # -----------------------------
+  # Laravel / PHP (API) 用
+  # -----------------------------
+  back:
+    build:
+      context: ./back
+      dockerfile: Dockerfile
+    container_name: laravel_back
+    depends_on:
+      - db
+    ports:
+      - "8000:80"  # Laravel 開発用ポート
+    volumes:
+      - ./back:/var/www/html
+    networks:
+      - app-net
+    
+  # -----------------------------
+  # React / Node 開発用
+  # -----------------------------
+  front:
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    container_name: react_front
+    volumes:
+      - ./front:/var/www/html          # ホスト側のコードを同期
+    ports:
+      - "5173:5173" # http://localhost:5173 → React（Vite）
+    networks:
+      - app-net
+
+  # -----------------------------
+  # MySQL データベース
+  # -----------------------------
+  db:
+    image: mysql:8.4.5
+    container_name: laravel_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: todo_ts
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - app-net
+
+  # -----------------------------
+  # phpMyAdmin
+  # -----------------------------
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      UPLOAD_LIMIT: 100M
+    ports:
+      - "8080:80"
+    networks:
+      - app-net
+
+# -----------------------------
+# ボリューム
+# -----------------------------
+volumes:
+  db_data:
+
+# -----------------------------
+# ネットワーク
+# -----------------------------
+networks:
+  app-net:

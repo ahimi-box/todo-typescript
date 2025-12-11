@@ -1,0 +1,10 @@
+# Laravel
+back/vendor/
+back/storage/
+back/.env
+
+# Node / TS
+front/node_modules/
+
+# OS
+.DS_Store
