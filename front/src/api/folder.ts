@@ -3,6 +3,7 @@ import type { Folder } from "../types/folder";
 
 const API_URL = "http://localhost:8000/api/folders";
 
+// フォルダ一覧取得
 export const getFolders = async (): Promise<Folder[]> => {
   const res = await axios.get(API_URL);
   return res.data;
