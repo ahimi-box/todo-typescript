@@ -1,0 +1,30 @@
+/* ページ全体 */
+.home {
+  max-width: 900px;
+  margin: 0 auto;       /* ← 中央寄せの決定打 */
+  padding: 24px;
+}
+
+/* タイトル */
+.home-title {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+/* フォルダ + タスクのエリア */
+.home-content {
+  display: flex;
+  gap: 32px;
+  /* justify-content: center; */
+  align-items: flex-start;
+}
+
+/* 左側（フォルダ） */
+.folder-area {
+  width: 250px;
+}
+
+/* タスク側 */
+.task-area {
+  flex: 1; /* 残り全部使う */
+}

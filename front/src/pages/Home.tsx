@@ -8,7 +8,7 @@ import { getFolders } from "../api/folder";
 import FolderList from "../components/FolderList";
 import TaskList from "../components/TaskList";
 import TaskModal from "../components/TaskModal";
-
+import "./Home.css";
 
 export default function Home() {
   // =========================
@@ -46,22 +46,30 @@ export default function Home() {
   // JSX（画面表示）
   // =========================
   return (
-    <div>
-      <h1>Todo アプリ</h1>
-      {/* フォルダ一覧 */}
-      <FolderList
-        folders={folders}
-        onSelect={handleSelectFolder}
-      />
-      {/* フォルダが選ばれているときだけ表示 */}
-      {selectedFolder && (
-        <>
-          <h2>{selectedFolder.title} のタスク</h2>
-          <button onClick={() => setIsTaskModalOpen(true)}>タスク追加</button>
-          {/* タスク一覧 */}
-          <TaskList folderId={selectedFolder.id} />
-        </>
-      )}
+    <div className="home">
+      <h1 className="home-title">Todo アプリ</h1>
+      <div className="home-content">
+        <div className="folder-area">
+          {/* フォルダ一覧 */}
+          <FolderList
+            folders={folders}
+            onSelect={handleSelectFolder}
+          />
+        </div>
+        <div className="task-area">
+          {/* フォルダが選ばれているときだけ表示 */}
+          {selectedFolder ? (
+            <>
+              <h2>{selectedFolder.title} のタスク</h2>
+              <button onClick={() => setIsTaskModalOpen(true)}>タスク追加</button>
+              {/* タスク一覧 */}
+              <TaskList folderId={selectedFolder.id} />
+            </>
+          ):(
+            <p>フォルダを選択してください</p>
+          )}
+        </div>
+      </div>
       {/* タスクモーダル */}
       <TaskModal
         isOpen={isTaskModalOpen}
