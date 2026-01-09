@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import { Folder } from "../types/folder";
+import type { Folder } from "../types/folder";
 import { getFolders } from "../api/folder";
 import "./FolderList.css";
 
-type Props = {
+type FolderListProps = {
+  folders: Folder[];
   // フォルダがクリックされたときに親に通知する関数
   onSelect: (folder: Folder) => void;
 };
 
-export default function FolderList({ onSelect }: Props) {
+export default function FolderList({ onSelect }: FolderListProps) {
   // フォルダ一覧を保存するstate
   const [folders, setFolders] = useState<Folder[]>([]);
   // データ取得中かどうか
