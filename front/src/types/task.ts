@@ -1,3 +1,9 @@
+export enum TaskStatus {
+  Todo = 0, //未着手
+  Doing = 1, //着手中
+  Done = 2, //完了
+}
+
 export type Task = {
   id: number;
   folder_id: number;

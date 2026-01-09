@@ -1,15 +1,16 @@
 import {useEffect, useState} from "react";
+import { TaskStatus } from "../types/task";
 import "./TaskModal.css";
 
 type Props = {
-  isOpen: Boolean;
+  isOpen: boolean;
   initialTitle?: string;
-  initialStatus?: number;
+  initialStatus?: TaskStatus;
   initialDueDate?: string;
   onClose: () => void;
   onSubmit: (task: {
     title: string;
-    status: number;
+    status: TaskStatus;
     due_date: string | null;
   }) => void;
 };
@@ -42,9 +43,9 @@ export default function TaskModal({
         <input type="text" placeholder="タスク名" value={title} onChange={(e) => setTitle(e.target.value)} />
 
         <select value={status} onChange={(e) => setStatus(Number(e.target.value))}>
-          <option value="{0}">未着手</option>
-          <option value="{1}">着手中</option>
-          <option value="{2}">完了</option>
+          <option value={TaskStatus.Todo}>未着手</option>
+          <option value={TaskStatus.Doing}>着手中</option>
+          <option value={TaskStatus.Done}>完了</option>
         </select>
         <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
 
@@ -52,7 +53,7 @@ export default function TaskModal({
           <button onClick={() => onSubmit({title, status, due_date: dueDate || null,})}>
             保存
           </button>
-          <button>
+          <button onClick={onClose}>
             キャンセル
           </button>
         </div>
