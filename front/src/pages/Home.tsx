@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import type { Folder } from "../types/folder";
 // API
 import { getFolders } from "../api/folder";
+import { createTask } from "../api/task";
 // コンポーネント
 import FolderList from "../components/FolderList";
 import TaskList from "../components/TaskList";
@@ -21,6 +22,8 @@ export default function Home() {
   const [selectedFolder, setSelectedFolder] = useState<Folder | null>(null);
   // タスクモーダルの開閉
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
+  // TaskListを再読み込み保存に成功したらTaskListに渡す
+  const [reloadTasks, setReloadTasks] = useState(false);
 
   // =========================
   // 初回表示時にフォルダ取得
@@ -63,7 +66,10 @@ export default function Home() {
               <h2>{selectedFolder.title} のタスク</h2>
               <button onClick={() => setIsTaskModalOpen(true)}>タスク追加</button>
               {/* タスク一覧 */}
-              <TaskList folderId={selectedFolder.id} />
+              <TaskList 
+              folderId={selectedFolder.id} 
+              reload={reloadTasks}
+              />
             </>
           ):(
             <p>フォルダを選択してください</p>
@@ -74,9 +80,17 @@ export default function Home() {
       <TaskModal
         isOpen={isTaskModalOpen}
         onClose={() => setIsTaskModalOpen(false)} 
-        onSubmit={(task) => {
+        onSubmit={async (task) => {
+          if (!selectedFolder) return;
+          try {
+            await createTask(selectedFolder.id, task);
+            setIsTaskModalOpen(false);
+            setReloadTasks((prev) => !prev);
+          } catch (err) {
+            console.error(err);
+          }
           console.log("作成するタスク：", task);
-          setIsTaskModalOpen(false);
+          // setIsTaskModalOpen(false);
           // 後でpost→再取得にする
         }}
       />

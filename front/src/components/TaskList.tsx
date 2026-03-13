@@ -15,9 +15,10 @@ import "./TaskList.css";
 // 「どのフォルダのタスクを表示するか」
 type TaskListProps = {
   folderId: number;
+  reload: boolean;
 };
 
-export default function TaskList({ folderId }: TaskListProps) {
+export default function TaskList({ folderId, reload }: TaskListProps) {
   // =========================
   // state（画面の状態）
   // =========================
@@ -45,8 +46,8 @@ export default function TaskList({ folderId }: TaskListProps) {
       .catch((err) => {
         console.error("タスク取得エラー:", err);
       });
-  }, [folderId]); // 👈 folderId が変わったら再実行
-
+  }, [folderId, reload]); // 👈 folderId が変わったら再実行
+ 
   // =========================
   // 表示部分（JSX）
   // =========================

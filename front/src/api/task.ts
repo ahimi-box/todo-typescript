@@ -10,13 +10,15 @@ export const getTasksByFolder = async (folderId: number): Promise<Task[]> => {
 
 export const createTask = async (
   folderId: number,
-  title:string,
-  due_date: string
+  task: {
+    title: string;
+    status: number;
+    due_date: string | null;
+  }
 ): Promise<Task> => {
-  const res = await axios.post(`${API_URL}/folders/${folderId}/tasks`, {
-    title,
-    due_date,
-  });
+  const res = await axios.post(`${API_URL}/folders/${folderId}/tasks`, 
+    task
+  );
   return res.data;
 };
 

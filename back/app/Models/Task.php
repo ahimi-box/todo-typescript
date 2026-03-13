@@ -9,9 +9,9 @@ class Task extends Model
 {
   use HasFactory;
   
-  protected $fillable = ['folder_id', 'title', 'status', 'due_date']; 
+  protected $fillable = ['folder_id', 'title', 'status', 'due_date'];
 
-  // Taskは１つのFolderに属する
+// Taskは１つのFolderに属する
   public function folder() {
     return $this->belongsTo(Folder::class);
   }
