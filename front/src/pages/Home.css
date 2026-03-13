@@ -1,8 +1,7 @@
-/* ページ全体 */
+/* 全体 */
 .home {
   max-width: 900px;
-  margin: 0 auto;       /* ← 中央寄せの決定打 */
-  padding: 24px;
+  margin: 0 auto;
 }
 
 /* タイトル */
@@ -11,20 +10,34 @@
   margin-bottom: 24px;
 }
 
-/* フォルダ + タスクのエリア */
+/* 左右レイアウト */
 .home-content {
-  display: flex;
-  gap: 32px;
-  /* justify-content: center; */
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 24px;
 }
 
-/* 左側（フォルダ） */
+/* フォルダ側 */
 .folder-area {
-  width: 250px;
+  background: #f5f5f5;
+  padding: 16px;
+  border-radius: 8px;
+  color: #000;
 }
 
 /* タスク側 */
 .task-area {
-  flex: 1; /* 残り全部使う */
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 8px;
+  color: #000;
+}
+
+/* タスクタイトル + ボタンの整理 */
+.task-area h2 {
+  margin-bottom: 8px;
+}
+
+.task-area button {
+  margin-bottom: 16px;
 }
