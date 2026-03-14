@@ -69,6 +69,7 @@ export default function Home() {
               <TaskList 
               folderId={selectedFolder.id} 
               reload={reloadTasks}
+              onDelete={() => setReloadTasks(prev => !prev)}
               />
             </>
           ):(

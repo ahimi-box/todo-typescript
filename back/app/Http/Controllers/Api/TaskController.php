@@ -69,10 +69,10 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy($folderId, $taskId)
     {
       // タスクをIDで取得
-      $task = Task::find($id);
+      $task = Task::find($taskId);
       if (!$task) {
         return response()->json(['error' => 'Not Found'], 404);
       }

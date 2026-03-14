@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import type { Task } from "../types/task";
 
 // API 関数（フォルダIDを指定してタスク一覧を取る）
-import { getTasksByFolder } from "../api/task";
+import { getTasksByFolder, deleteTask } from "../api/task";
 import { TaskStatus } from "../types/task";
 import "./TaskList.css";
 
@@ -16,9 +16,10 @@ import "./TaskList.css";
 type TaskListProps = {
   folderId: number;
   reload: boolean;
+  onDelete: () => void;
 };
 
-export default function TaskList({ folderId, reload }: TaskListProps) {
+export default function TaskList({ folderId, reload, onDelete }: TaskListProps) {
   // =========================
   // state（画面の状態）
   // =========================
@@ -47,6 +48,18 @@ export default function TaskList({ folderId, reload }: TaskListProps) {
         console.error("タスク取得エラー:", err);
       });
   }, [folderId, reload]); // 👈 folderId が変わったら再実行
+
+  // =========================
+  // タスク削除
+  // =========================
+  const handleDelete = async (taskId: number) => {
+    try {
+      await deleteTask(folderId, taskId);
+      onDelete(); //削除後に再取得
+    } catch (err) {
+      console.error("削除エラー：", err);
+    }
+  }
  
   // =========================
   // 表示部分（JSX）
@@ -67,6 +80,9 @@ export default function TaskList({ folderId, reload }: TaskListProps) {
             {task.title}
             {/* ステータス表示（仮） */}
             {task.status === TaskStatus.Done && " ✅"}
+            <button onClick={() => handleDelete(task.id)}>
+              削除
+            </button>
           </li>
         ))}
       </ul>
