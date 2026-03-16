@@ -1,47 +1,35 @@
-import { useEffect, useState } from "react";
 import type { Folder } from "../types/folder";
-import { getFolders } from "../api/folder";
 import "./FolderList.css";
 
 type FolderListProps = {
   folders: Folder[];
   // フォルダがクリックされたときに親に通知する関数
   onSelect: (folder: Folder) => void;
+  onDelete: (folderId: number) => void;
 };
 
-export default function FolderList({ onSelect }: FolderListProps) {
-  // フォルダ一覧を保存するstate
-  const [folders, setFolders] = useState<Folder[]>([]);
-  // データ取得中かどうか
-  const [loading, setLoading] = useState(true);
-  // 初回レンダリング時にフォルダ一覧を取得
-  useEffect(() =>  {
-    getFolders()
-    .then((data) => {
-      // APIから返ってきたフォルダ配列を保存
-      setFolders(data);
-    })
-    .catch((error) => {
-      console.error("フォルダ取得失敗", error);
-    })
-    .finally(() => {
-      // 成功しても失敗してもローディング終了
-      setLoading(false);
-    });
-  }, []);
-  // 読み込み中の表示
-  if (loading) {
-    return <p>読み込み中...</p>;
-  }
+export default function FolderList({ folders, onSelect, onDelete}: FolderListProps) {
 
   return (
     <ul className="folder-list">
       {folders.map((folder) => (
         <li 
-          key={folder.id}
-          onClick={() => onSelect(folder)} // 親に通知 
+          key={folder.id} 
+          className="folder-item"
         >
-          {folder.title}
+          {/*  親に通知 */}
+          <span
+          className="folder-title" 
+          onClick={() => onSelect(folder)}
+            >
+            {folder.title}
+            </span>
+    
+          <button
+          className="delete-btn"
+           onClick={() => onDelete(folder.id)}>
+            削除
+          </button>
         </li>
       ))}
     </ul>

@@ -13,3 +13,31 @@
   background: #4f46e5; /* 青 */
   color: #fff;
 }
+
+.folder-item {
+  display: flex;
+  align-items: center;
+  padding: 6px 0;
+}
+
+/* フォルダ名を横いっぱいに広げる */
+.folder-title {
+  flex: 1;
+  cursor: pointer;
+}
+
+/* 削除ボタン */
+.delete-btn {
+  background-color: #e53935;
+  color: white;
+  border: none;
+  padding: 3px 8px;
+  font-size: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* ホバー */
+.delete-btn:hover {
+  background-color: #c62828;
+}

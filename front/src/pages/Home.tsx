@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 // 型
 import type { Folder } from "../types/folder";
 // API
-import { getFolders, createFolder } from "../api/folder";
+import { getFolders, createFolder, deleteFolder } from "../api/folder";
 import { createTask } from "../api/task";
 // コンポーネント
 import FolderModal from "../components/FolderModal";
@@ -49,6 +49,20 @@ export default function Home() {
   };
 
   // =========================
+  // フォルダ削除の処理
+  // =========================
+  const handleDeleteFolder = async (folderId: number) => {
+    try {
+      await deleteFolder(folderId);
+      setFolders((prev) => 
+        prev.filter((f) => f.id !== folderId)
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // =========================
   // JSX（画面表示）
   // =========================
   return (
@@ -65,6 +79,7 @@ export default function Home() {
           <FolderList
             folders={folders}
             onSelect={handleSelectFolder}
+            onDelete={handleDeleteFolder}
           />
         </div>
         <div className="task-area">
