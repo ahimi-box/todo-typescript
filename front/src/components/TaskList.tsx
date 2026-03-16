@@ -99,14 +99,25 @@ export default function TaskList({ folderId, reload, onDelete }: TaskListProps) 
         <ul>
           {tasks.map((task) => (
             // key は React のお約束（id を使う）
-            <li key={task.id}>
+            <li
+            className="task-item"
+            key={task.id}
+            >
+              <span className="task-title">
               {task.title}
               {/* ステータス表示（仮） */}
               {task.status === TaskStatus.Done && " ✅"}
-              <button onClick={() => handleEdit(task)}>
+              </span>
+              <button
+              className="edit-btn"
+              onClick={() => handleEdit(task)}
+              >
                 編集
               </button>
-              <button onClick={() => handleDelete(task.id)}>
+              <button
+              className="delete-btn"
+              onClick={() => handleDelete(task.id)}
+              >
                 削除
               </button>
             </li>
