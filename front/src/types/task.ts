@@ -9,7 +9,7 @@ export type Task = {
   folder_id: number;
   title: string;
   status: number;
-  due_date: string;
+  due_date: string | null;
   created_at: string;
   updated_at: string;
 }

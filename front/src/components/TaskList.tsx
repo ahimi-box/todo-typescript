@@ -7,8 +7,9 @@ import { useEffect, useState } from "react";
 import type { Task } from "../types/task";
 
 // API 関数（フォルダIDを指定してタスク一覧を取る）
-import { getTasksByFolder, deleteTask } from "../api/task";
+import { getTasksByFolder, deleteTask, updateTask } from "../api/task";
 import { TaskStatus } from "../types/task";
+import TaskEditModal from "./TaskEditModal";
 import "./TaskList.css";
 
 // 親（Home）から受け取る props の型
@@ -27,7 +28,8 @@ export default function TaskList({ folderId, reload, onDelete }: TaskListProps) 
   // タスク一覧を保持する state
   // 最初は空配列
   const [tasks, setTasks] = useState<Task[]>([]);
-
+  // edit
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
   // =========================
   // 副作用（API 通信）
   // =========================
@@ -50,6 +52,26 @@ export default function TaskList({ folderId, reload, onDelete }: TaskListProps) 
   }, [folderId, reload]); // 👈 folderId が変わったら再実行
 
   // =========================
+  // タスク編集
+  // =========================
+  const handleEdit = (task: Task) => {
+    setEditingTask(task);
+  };
+
+  // =========================
+  // タスクupdate
+  // =========================
+  const handleUpdate = async (task: Task) => {
+    try {
+      await updateTask(folderId, task.id, task.title, task.status, task.due_date);
+      setEditingTask(null);
+      onDelete(); //relod
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // =========================
   // タスク削除
   // =========================
   const handleDelete = async (taskId: number) => {
@@ -66,26 +88,39 @@ export default function TaskList({ folderId, reload, onDelete }: TaskListProps) 
   // =========================
 
   return (
-    <div>
-      <h2>タスク一覧</h2>
+    <>
+      <div>
+        <h2>タスク一覧</h2>
 
-      {/* タスクが1件も無い場合 */}
-      {tasks.length === 0 && <p>タスクはありません</p>}
+        {/* タスクが1件も無い場合 */}
+        {tasks.length === 0 && <p>タスクはありません</p>}
 
-      {/* タスク一覧を表示 */}
-      <ul>
-        {tasks.map((task) => (
-          // key は React のお約束（id を使う）
-          <li key={task.id}>
-            {task.title}
-            {/* ステータス表示（仮） */}
-            {task.status === TaskStatus.Done && " ✅"}
-            <button onClick={() => handleDelete(task.id)}>
-              削除
-            </button>
-          </li>
-        ))}
-      </ul>
-    </div>
+        {/* タスク一覧を表示 */}
+        <ul>
+          {tasks.map((task) => (
+            // key は React のお約束（id を使う）
+            <li key={task.id}>
+              {task.title}
+              {/* ステータス表示（仮） */}
+              {task.status === TaskStatus.Done && " ✅"}
+              <button onClick={() => handleEdit(task)}>
+                編集
+              </button>
+              <button onClick={() => handleDelete(task.id)}>
+                削除
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+       {/* モーダル */}
+      {editingTask && (
+        <TaskEditModal
+        task={editingTask}
+        onClose={() => setEditingTask(null)}
+        onSubmit={handleUpdate}
+        />
+      )}
+    </>
   );
 }

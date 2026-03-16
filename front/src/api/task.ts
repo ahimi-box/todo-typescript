@@ -27,7 +27,7 @@ export const updateTask = async (
   taskId: number,
   title: string,
   status: number,
-  due_date: string
+  due_date: string | null
 ): Promise<Task> => {
   const res = await axios.put(
     `${API_URL}/folders/${folderId}/tasks/${taskId}`,
