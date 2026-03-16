@@ -3,9 +3,10 @@ import { useEffect, useState } from "react";
 // 型
 import type { Folder } from "../types/folder";
 // API
-import { getFolders } from "../api/folder";
+import { getFolders, createFolder } from "../api/folder";
 import { createTask } from "../api/task";
 // コンポーネント
+import FolderModal from "../components/FolderModal";
 import FolderList from "../components/FolderList";
 import TaskList from "../components/TaskList";
 import TaskModal from "../components/TaskModal";
@@ -20,6 +21,8 @@ export default function Home() {
   const [folders, setFolders] = useState<Folder[]>([]);
   // 選択中のフォルダ
   const [selectedFolder, setSelectedFolder] = useState<Folder | null>(null);
+  // フォルダモーダル
+  const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
   // タスクモーダルの開閉
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   // TaskListを再読み込み保存に成功したらTaskListに渡す
@@ -53,6 +56,11 @@ export default function Home() {
       <h1 className="home-title">Todo アプリ</h1>
       <div className="home-content">
         <div className="folder-area">
+          <div>
+            <button onClick={() => setIsFolderModalOpen(true)}>
+              フォルダ追加
+            </button>
+          </div>
           {/* フォルダ一覧 */}
           <FolderList
             folders={folders}
@@ -77,6 +85,21 @@ export default function Home() {
           )}
         </div>
       </div>
+      {/* フォルダモーダル */}
+      <FolderModal
+      isOpen={isFolderModalOpen}
+      onClose={() => setIsFolderModalOpen(false)}
+      onSubmit={async (title) => {
+        try {
+          await createFolder(title);
+          const folders =await getFolders();
+          setFolders(folders);
+          setIsFolderModalOpen(false);
+        } catch (err) {
+          console.error(err);
+        }
+      }}
+      />
       {/* タスクモーダル */}
       <TaskModal
         isOpen={isTaskModalOpen}

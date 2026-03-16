@@ -15,6 +15,9 @@ export default function FolderModal({
   onSubmit,
 }: Props) {
   const [title,setTitle] = useState("");
+  const handleSubmit = () => {
+    onSubmit(title);
+  };
 
   useEffect(() => {
     if(isOpen) {
@@ -29,7 +32,7 @@ export default function FolderModal({
         <h2>フォルダ名</h2>
         <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
         <div className="modal-buttons">
-          <button onClick={() => onSubmit(title)}>保存</button>
+          <button onClick={handleSubmit}>保存</button>
           <button onClick={onClose}>キャンセル</button>
         </div>
       </div>
