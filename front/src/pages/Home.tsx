@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 // 型
 import type { Folder } from "../types/folder";
 // API
-import { getFolders, createFolder, deleteFolder } from "../api/folder";
+import { getFolders, createFolder, deleteFolder, updateFolder } from "../api/folder";
 import { createTask } from "../api/task";
 // コンポーネント
 import FolderModal from "../components/FolderModal";
@@ -23,6 +23,7 @@ export default function Home() {
   const [selectedFolder, setSelectedFolder] = useState<Folder | null>(null);
   // フォルダモーダル
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
+  const [editingFolder, setEditingFolder] = useState<Folder | null>(null);
   // タスクモーダルの開閉
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   // TaskListを再読み込み保存に成功したらTaskListに渡す
@@ -63,6 +64,14 @@ export default function Home() {
   };
 
   // =========================
+  // フォルダ編集の処理
+  // =========================
+  const handleEditFolder = (folder: Folder) => {
+    setEditingFolder(folder);
+    setIsFolderModalOpen(true);
+  }
+
+  // =========================
   // JSX（画面表示）
   // =========================
   return (
@@ -80,6 +89,7 @@ export default function Home() {
             folders={folders}
             onSelect={handleSelectFolder}
             onDelete={handleDeleteFolder}
+            onEdit={handleEditFolder}
           />
         </div>
         <div className="task-area">
@@ -103,13 +113,23 @@ export default function Home() {
       {/* フォルダモーダル */}
       <FolderModal
       isOpen={isFolderModalOpen}
-      onClose={() => setIsFolderModalOpen(false)}
+      initialTitle={editingFolder?.title}
+      onClose={() => {
+        setIsFolderModalOpen(false)
+        setEditingFolder(null);
+      }}
       onSubmit={async (title) => {
         try {
-          await createFolder(title);
+          if (editingFolder) {
+            await updateFolder(editingFolder.id, title);
+          } else {
+            await createFolder(title);
+          }
+          
           const folders =await getFolders();
           setFolders(folders);
           setIsFolderModalOpen(false);
+          setEditingFolder(null);
         } catch (err) {
           console.error(err);
         }

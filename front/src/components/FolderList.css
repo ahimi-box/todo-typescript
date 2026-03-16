@@ -10,8 +10,8 @@
 }
 
 .folder-list li:hover {
-  background: #4f46e5; /* 青 */
-  color: #fff;
+  background: #eef3ff;
+  /* color: #fff; */
 }
 
 .folder-item {
@@ -26,18 +26,31 @@
   cursor: pointer;
 }
 
-/* 削除ボタン */
+/* 共通ボタンサイズ */
+.edit-btn,
 .delete-btn {
-  background-color: #e53935;
-  color: white;
   border: none;
   padding: 3px 8px;
   font-size: 12px;
   border-radius: 4px;
   cursor: pointer;
+  color: white;
 }
 
-/* ホバー */
+/* 編集ボタン */
+.edit-btn {
+  background-color: #1976d2;
+}
+
+.edit-btn:hover {
+  background-color: #1565c0;
+}
+
+/* 削除ボタン */
+.delete-btn {
+  background-color: #e53935;
+}
+
 .delete-btn:hover {
   background-color: #c62828;
 }
